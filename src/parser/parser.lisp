@@ -26,7 +26,7 @@
    (:left-bracket :left-bracket entries :right-bracket :right-bracket))
   (entries
    scalar-exp
-   (scalar-expr entries))
+   (scalar-exp entries))
   (scalar-exp
    :number)
   (assignment
@@ -38,9 +38,9 @@
 	(values nil nil)
 	(let ((tok (pop tokens)))
 	  (let ((terminal
-		 (cond ((member (car tok) '(:variable :number :plus :minus :mul :left-bracket :right-bracket :assignment)) tok)
-		       (t (error "Unexpected value ~S" (car tok))))))
-	    (values terminal (if (or (equalp terminal ':left-bracket)
-				     (equalp terminal ':right-bracket))
-				 terminal
-				 (cdr tok))))))))
+		 (cond ((member tok '((:right-bracket) (:left-bracket)))
+			tok)
+		       ((member (car tok) '(:number :plus :minus :mul))
+			tok)
+		       (t (error "Unexpected value ~S" tok)))))
+		(values terminal tok))))))
