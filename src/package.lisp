@@ -1,3 +1,4 @@
 (defpackage #:yotta
   (:use #:common-lisp
-	#:alexa))
+	#:alexa
+	#:yacc))
