@@ -20,9 +20,11 @@ matrice ::= [[int]]
 ```
 
 #### Abstract Syntax
+```
 exp ::= (Scalar scalar) | (Vector vector) | (Matrice matrice)
      |  (Add exp exp)   | (Sub exp exp)
      |  (Assign var exp)
+```
      
 #### x86
 ....
