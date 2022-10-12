@@ -11,7 +11,7 @@
   ((:num "\\d+")
    (:name "[A-Za-z][A-Za-z0-9_]*"))
   ("{{NAME}}" (return (tok :variable (intern $@))))
-  ("{NUM}}"   (return (tok :number (parse-integer $@))))
+  ("{{NUM}}"   (return (tok :number (parse-integer $@))))
   ("[+*-]"    (return (tok :operator (intern $@ 'keyword))))
   ("\\["      (return (tok :left-bracket)))
   ("\\]"      (return (tok :right-bracket)))
