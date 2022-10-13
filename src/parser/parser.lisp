@@ -2,7 +2,7 @@
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   
-  (defun infix->prefix (a b c)
+  (defun infix-to-prefix (a b c)
     "It converts and expression from infix notation to prefix for parsing purposes."
     (list b a c))
 
@@ -17,9 +17,9 @@
      vector-exp
      matrix-exp
      assignment
-     (expression :plus expression #'i2p)
-     (expression :minus expression #'i2p)
-     (expression :mul expression #'i2p))
+     (expression :plus expression #'infix-to-prefix)
+     (expression :minus expression #'infix-to-prefix)
+     (expression :mul expression #'infix-to-prefix))
     (vector-exp
      (:left-bracket :right-bracket)
      (:left-bracket entries :right-bracket))
@@ -35,7 +35,7 @@
     (scalar-exp
      :number)
     (assignment
-     (:variable :assignment expression #'i2p))))
+     (:variable :assignment expression #'infix-to-prefix))))
   
 (defun token-generator (toks)
  "Make a lexer that is compatible with CL-YACC."
