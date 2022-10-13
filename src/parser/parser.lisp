@@ -21,9 +21,12 @@
   (vector-exp
    (:left-bracket :right-bracket)
    (:left-bracket entries :right-bracket))
-  (matrix-exp
-   (:left-bracket :left-bracket :right-bracket :right-bracket)
-   (:left-bracket :left-bracket entries :right-bracket :right-bracket))
+  (matrix
+   (:left-bracket  :right-bracket)
+   (:left-bracket vectors :right-bracket))
+  (vectors
+   vector-exp
+   (vector-exp vectors))
   (entries
    scalar-exp
    (scalar-exp entries))
@@ -32,15 +35,17 @@
   (assignment
    (:variable :assignment expression #'i2p))))
   
-(defun token-generator (tokens)
+(defun token-generator (toks)
   (lambda ()
-    (if (null tokens)
+    (if (null toks)
 	(values nil nil)
-	(let ((tok (pop tokens)))
-	  (let ((terminal
-		 (cond ((member tok '((:right-bracket) (:left-bracket)))
-			tok)
-		       ((member (car tok) '(:number :plus :minus :mul))
-			tok)
-		       (t (error "Unexpected value ~S" tok)))))
-		(values terminal tok))))))
+	(let ((tok (pop toks)))
+	  (values (token-type tok)
+		  (token-value tok))))))
+
+(defun token-type (tok)
+  (car tok))
+
+
+(defun token-value (tok)
+  (cdr tok))
