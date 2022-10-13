@@ -15,13 +15,14 @@
   (expression
    vector-exp
    matrix-exp
+   assignment
    (expression :plus expression #'i2p)
    (expression :minus expression #'i2p)
    (expression :mul expression #'i2p))
   (vector-exp
    (:left-bracket :right-bracket)
    (:left-bracket entries :right-bracket))
-  (matrix
+  (matrix-exp
    (:left-bracket  :right-bracket)
    (:left-bracket vectors :right-bracket))
   (vectors
