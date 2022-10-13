@@ -21,6 +21,7 @@
   ("\\s+"      nil))
 
 (defun lex-line (string)
+  "Make a list of tokens given the expression represented as a string."
   (loop :with lexer := (linear-algebra-lexer string)
 	:for tok := (funcall lexer)
 	:while tok
