@@ -1,5 +1,6 @@
 (defpackage #:yotta
   (:use #:common-lisp
 	#:alexa
-	#:yacc)
+	#:yacc
+	#:alexandria)
   (:export #:token-generator))
