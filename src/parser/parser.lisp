@@ -1,14 +1,6 @@
 (in-package #:yotta)
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  
-  (defun infix-to-prefix (a b c)
-    "It converts and expression from infix notation to prefix for parsing purposes."
-    (list b a c))
-
-  (defun k-2-3 (a b c)
-    (declare (ignore a c))
-    b)
 
   (defstruct plus left-exp right-exp)
 
