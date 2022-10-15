@@ -1,19 +1,37 @@
 (in-package #:yotta)
 
-(defstruct program expressions)
+(defstruct program
+  "A PROGRAM ast node."
+  expressions)
 
-(defstruct plus left-exp right-exp)
+(defstruct plus
+  "A PLUS ast node."
+  left-exp right-exp)
 
-(defstruct minus left-exp right-exp)
+(defstruct minus
+  "A MINUS ast node."
+  left-exp right-exp)
 
-(defstruct mul left-exp right-exp)
+(defstruct mul
+  "A MULTIPLICATION ast node."
+  left-exp right-exp)
   
-(defstruct vec entries)
+(defstruct vec
+  "A VECTOR ast node."
+  entries)
 
-(defstruct matrix entries)
+(defstruct matrix
+  "A MATRIX ast node."
+  entries)
 
-(defstruct num num)
+(defstruct num
+  "A NUMBER ast node."
+  num)
 
-(defstruct var var)
+(defstruct var
+  "A VARAIABLE ast node."
+  var)
 
-(defstruct assignment variable exp)
+(defstruct assignment
+  "An ASSIGNMENT ast node."
+  variable exp)
