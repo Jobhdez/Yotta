@@ -10,5 +10,6 @@
      (:module "lexer"
 	      :components ((:file "lexer")))
      (:module "parser"
-	      :components ((:file "parser")))
-     ))
+	      :components ((:file "ast")
+			   (:file "parser")
+			   (:file "parsefile")))))
