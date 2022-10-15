@@ -2,19 +2,8 @@
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
 
-  (defstruct plus left-exp right-exp)
-
-  (defstruct minus left-exp right-exp)
-
-  (defstruct mul left-exp right-exp)
-  
-  (defstruct vec entries)
-
-  (defstruct matrix entries)
-
-  (defstruct num num)
-
-  (defstruct assignment variable exp)
+  (defun build-program (expressions)
+    (make-program :expressions expressions))
   
   (defun build-plus (left-exp plus-tok right-exp)
     (declare (ignore plus-tok))
@@ -42,18 +31,27 @@
   (defun build-num (num)
     (make-num :num num))
 
+  (defun build-var (var)
+    (make-var :var var))
+
   (defun build-assignment (var assignment exp)
     (declare (ignore assignment))
     (make-assignment :variable var
 		     :exp exp))
 
   (define-parser *linear-algebra-grammar*
-      (:start-symbol expression)
+      (:start-symbol program)
     (:terminals (:number :variable :plus :minus :mul :left-bracket :right-bracket :assignment))
+    (program
+     (expressions #'build-program))
+    (expressions
+     expression
+     (expression expressions))
     (expression
      vector-exp
      matrix-exp
      assignment
+     variable
      (expression :plus expression #'build-plus)
      (expression :minus expression #'build-minus)
      (expression :mul expression #'build-mul))
@@ -71,23 +69,8 @@
      (scalar-exp entries))
     (scalar-exp
      (:number #'build-num))
+    (variable
+     (:variable #'build-var))
     (assignment
      (:variable :assignment expression #'build-assignment))))
   
-(defun token-generator (toks)
- "Make a lexer that is compatible with CL-YACC."
-  (lambda ()
-    (if (null toks)
-	(values nil nil)
-	(let ((tok (pop toks)))
-	  (values (token-type tok)
-		  (token-value tok))))))
-
-(defun token-type (tok)
-  "returns the type the token TOK."
-  (car tok))
-
-
-(defun token-value (tok)
-  "Returns the value of the token TOK."
-  (cdr tok))
