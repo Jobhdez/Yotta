@@ -20,6 +20,25 @@
   ("\\="       (return (tok :assignment)))
   ("\\s+"      nil))
 
+(defun token-generator (toks)
+ "Make a lexer that is compatible with CL-YACC."
+  (lambda ()
+    (if (null toks)
+	(values nil nil)
+	(let ((tok (pop toks)))
+	  (values (token-type tok)
+		  (token-value tok))))))
+
+(defun token-type (tok)
+  "returns the type the token TOK."
+  (car tok))
+
+
+(defun token-value (tok)
+  "Returns the value of the token TOK."
+  (cdr tok))
+
+
 (defun lex-line (string)
   "Make a list of tokens given the expression represented as a string."
   (loop :with lexer := (linear-algebra-lexer string)
