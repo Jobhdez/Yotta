@@ -7,7 +7,8 @@ Development of a linear algebra compiler in process.
 - [Quicklisp](https://www.quicklisp.org/beta/)
 Note: after installing `Quicklisp` a `quicklisp` folder will be created. 
 - [CL-YACC](https://github.com/jech/cl-yacc)
-Note: clone `cl-yacc` into `quicklisp/local-projects` so it can be loaded.
+- [Alexa](https://github.com/quil-lang/alexa)
+Note: clone `cl-yacc` and `alexa` into `quicklisp/local-projects` so it can be loaded.
 
 **Install**:
 `git clone git@github.com:Jobhdez/Yotta.git`
