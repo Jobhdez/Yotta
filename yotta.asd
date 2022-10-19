@@ -12,4 +12,7 @@
      (:module "parser"
 	      :components ((:file "ast")
 			   (:file "parser")
-			   (:file "parsefile")))))
+			   (:file "parsefile")))
+     (:module "backends"
+	      :components ((:module "lisp"
+				   :components ((:file "lispIL")))))))

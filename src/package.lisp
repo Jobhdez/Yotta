@@ -4,4 +4,5 @@
 	#:yacc
 	#:alexandria
 	#:trivia)
-  (:export #:token-generator))
+  (:export #:token-generator
+	   #:make-lisp-interlan))
