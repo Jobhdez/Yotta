@@ -4,7 +4,7 @@
   "given a parse tree create a lisp based intermediate language."
   (match parse-tree
 	 ((program :expressions exps)
-	  (mapcar #'make-lisp-ast exps))
+	  (mapcar #'make-lisp-ast (flatten exps)))
 	 (_ (error "Not valid expression."))))
 
 (defun make-lisp-ast (expression-node)
@@ -13,7 +13,9 @@
 	 ((assignment :variable a :exp b)
 	  (make-defvar  a (make-lisp-ast b)))
 	 ((vec :entries a)
-	  (make-lisp-vec (mapcar #'make-lisp-ast) a))
+	  (make-lisp-vec (mapcar #'make-lisp-ast a)))
+	 ;;((matrix :entries exps)
+	 ;; (make-lisp-matrix (mapcar #'make-lisp-ast exps)))
 	 ((num :num n)
 	  n)
 	 ((plus :left-exp lexp :right-exp rexp)
@@ -33,10 +35,16 @@
 (defun make-defvar (var exp)
   `(defvar ,var ,exp))
 
+(defun make-lisp-vec (elements)
+  (let ((vec (map 'vector (lambda (n) n) elements)))
+    vec))
+
 (defun make-sum-vectors (vec vec2)
-  `(loop for i in ,vec
-	 for j in ,vec2
-	 collect (+ i j)))
+  "Lisp based ast for code generation."
+  `(progn (setq newa (make-array ,(length vec)))
+          (dotimes (i ,(length vec)) (setf (aref newa i) (+ (aref ,vec i) (aref ,vec2 i))))
+           newa))
+
 
 (defun make-minus-vectors (vec vec2)
   `(loop for i in ,vec
@@ -47,6 +55,3 @@
   `(loop for i in ,vec
 	 for j in ,vec2
 	 collect (* i j)))
-
-	 
-  
