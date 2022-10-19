@@ -14,6 +14,7 @@ Note: clone `cl-yacc` and `alexa` into `quicklisp/local-projects` so it can be l
 
 **Install**:
 `git clone git@github.com:Jobhdez/Yotta.git`
+
 Note: clone this project in `quicklisp/local-projects` so you can load the project with `(ql:quickload :yotta)`.
 
 **Use**:
