@@ -2,5 +2,6 @@
   (:use #:common-lisp
 	#:alexa
 	#:yacc
-	#:alexandria)
+	#:alexandria
+	#:trivia)
   (:export #:token-generator))
