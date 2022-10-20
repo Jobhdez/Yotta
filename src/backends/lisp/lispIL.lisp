@@ -40,7 +40,7 @@
     vec))
 
 (defun make-sum-vectors (vec vec2)
-  "Lisp based ast for code generation."
+  "Lisp based ast for MAKE-SUM-VECTORS code generation."
   `(progn (setq newa (make-array ,(length vec)))
           (dotimes (i ,(length vec)) 
 		  (setf (aref newa i) 
