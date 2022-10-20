@@ -33,27 +33,29 @@
 	 (_ (error "Not a valid expression node."))))
 
 (defun make-defvar (var exp)
+  "Lisp based ast node for DEFVAR."
   `(defvar ,var ,exp))
 
 (defun make-lisp-vec (elements)
+  "Lisp based ast node for VECTOR."
   (let ((vec (map 'vector (lambda (n) n) elements)))
     vec))
 
 (defun make-sum-vectors (vec vec2)
-  "Lisp based ast for MAKE-SUM-VECTORS code generation."
+  "Lisp based ast node for MAKE-SUM-VECTORS."
   `(progn (setq newa (make-array ,(length vec)))
           (dotimes (i ,(length vec)) 
 		  (setf (aref newa i) 
-			(+ (aref ,vec i) (aref ,vec2 i))))
+			(+ (aref ,vec i)
+			   (aref ,vec2 i))))
            newa))
 
 
 (defun make-minus-vectors (vec vec2)
-  `(loop for i in ,vec
-	 for j in ,vec2
-	 collect (- i j)))
-
-(defun make-mul-vectors (vec vec2)
-  `(loop for i in ,vec
-	 for j in ,vec2
-	 collect (* i j)))
+  "Lisp based ast node for MAKE-MINUS-VECTOR."
+  `(progn (setq newa (make-array ,(length vec)))
+          (dotimes (i ,(length vec))
+	    (setf (aref newa i) 
+	       	  (- (aref ,vec i)
+		     (aref ,vec2 i))))
+           newa))
