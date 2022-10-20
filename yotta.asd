@@ -15,4 +15,19 @@
 			   (:file "parsefile")))
      (:module "backends"
 	      :components ((:module "lisp"
-				   :components ((:file "lispIL")))))))
+				    :components ((:file "lispIL")))))))
+
+(asdf:defsystem #:yotta/tests
+    :description "Tests for Yotta."
+    :author "Job Hernandez <hj93@protonmail.com>"
+    :depends-on (#:yotta #:fiasco)
+    :perform (asdf:test-op (o s)
+			   (unless (symbol-call :yotta-tests
+						:run-yotta-tests)
+			     (error "Tests failed.")))
+    :pathname "tests/"
+    :serial t
+    :components ((:file "package")
+		 (:file "parsing-tests")
+		 (:file "lisp-IL-tests")
+		 (:file "utilities")))
