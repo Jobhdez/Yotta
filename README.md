@@ -22,5 +22,8 @@ Note: clone this project in `quicklisp/local-projects` so you can load the proje
 
 - `(in-package :yotta)`
 
+**Test**
+`(ql:quickload :yotta/tests)` followed by `(asdf:test-system :yotta)`
+
 # Acknowledgements
 [Robert Smith](https://github.com/stylewarning) is helping me design this compiler.
