@@ -15,7 +15,9 @@
 			   (:file "parsefile")))
      (:module "backends"
 	      :components ((:module "lisp"
-				    :components ((:file "lispIL")))))))
+				    :components ((:file "lispIL")
+						 (:file "ast")
+						 (:file "generatelisp")))))))
 
 (asdf:defsystem #:yotta/tests
     :description "Tests for Yotta."
