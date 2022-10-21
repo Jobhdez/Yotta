@@ -11,51 +11,56 @@
   "given an parse tree node create a lisp abstract syntax tree node (ie., intermediate language."
   (match expression-node
 	 ((assignment :variable a :exp b)
-	  (make-defvar  a (make-lisp-ast b)))
+	  (make-defvarlisp :var a
+			   :exp (make-lisp-ast b)))
 	 ((vec :entries a)
-	  (make-lisp-vec (mapcar #'make-lisp-ast a)))
+	  (make-vectorlisp :dimension (length a)
+			   :elements (mapcar #'make-lisp-ast a)))
 	 ;;((matrix :entries exps)
 	 ;; (make-lisp-matrix (mapcar #'make-lisp-ast exps)))
 	 ((num :num n)
-	  n)
+	  (make-numlisp :n n))
 	 ((plus :left-exp lexp :right-exp rexp)
 	  (if (and (vec-p lexp)
 		   (vec-p rexp))
-	      (make-sum-vectors (make-lisp-ast lexp) (make-lisp-ast rexp))))
+	      (make-vectorsum :i 'i
+			      :n (length (vec-entries lexp))
+			      :exp (make-setflisp :var (make-areflisp :array 'newarr
+								      :i 'i)
+						  :exp (make-sumlisp :leftexp
+								     (make-areflisp :array
+										    (make-lisp-ast
+										     lexp)
+										    :i 'i)
+								     :rightexp
+								     (make-areflisp :array
+										    (make-lisp-ast
+										     rexp)
+										    :i 'i)))
+			      :leftexp (make-lisp-ast lexp)
+			      :rightexp (make-lisp-ast rexp))))
 	 ((minus :left-exp lexp :right-exp rexp)
 	  (if (and (vec-p lexp)
 		   (vec-p rexp))
-	      (make-minus-vectors (make-lisp-ast lexp) (make-lisp-ast rexp))))
-	 ((mul :left-exp lexp :right-exp rexp)
-	  (if (and (vec-p lexp)
-		   (vec-p rexp))
-	      (make-mul-vectors (make-lisp-ast lexp) (make-lisp-ast rexp))))
+	      (make-vectorminus :i 'i
+			      :n (length (vec-entries lexp))
+			      :exp (make-setflisp :var (make-areflisp :array 'newarr
+								      :i 'i)
+						  :exp (make-minuslisp :leftexp
+								     (make-areflisp :array
+										    (make-lisp-ast
+										     lexp)
+										    :i 'i)
+								     :rightexp
+								     (make-areflisp :array
+										    (make-lisp-ast
+										     rexp)
+										    :i 'i)))
+			      :leftexp (make-lisp-ast lexp)
+			      :rightexp (make-lisp-ast rexp))))
+	 ;((mul :left-exp lexp :right-exp rexp)
+	  ;(if (and (vec-p lexp)
+		   ;(vec-p rexp))
+	     ; (make-mul-vectors (make-lisp-ast lexp) (make-lisp-ast rexp))))
 	 (_ (error "Not a valid expression node."))))
 
-(defun make-defvar (var exp)
-  "Lisp based ast node for DEFVAR."
-  `(defvar ,var ,exp))
-
-(defun make-lisp-vec (elements)
-  "Lisp based ast node for VECTOR."
-  (let ((vec (map 'vector (lambda (n) n) elements)))
-    vec))
-
-(defun make-sum-vectors (vec vec2)
-  "Lisp based ast node for MAKE-SUM-VECTORS."
-  `(progn (setq newa (make-array ,(length vec)))
-          (dotimes (i ,(length vec)) 
-		  (setf (aref newa i) 
-			(+ (aref ,vec i)
-			   (aref ,vec2 i))))
-           newa))
-
-
-(defun make-minus-vectors (vec vec2)
-  "Lisp based ast node for MAKE-MINUS-VECTOR."
-  `(progn (setq newa (make-array ,(length vec)))
-          (dotimes (i ,(length vec))
-	    (setf (aref newa i) 
-	       	  (- (aref ,vec i)
-		     (aref ,vec2 i))))
-           newa))
