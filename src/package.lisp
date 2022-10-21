@@ -26,4 +26,30 @@
 	   #:var
 	   #:make-var
 	   #:assignment
-	   #:make-assignment))
+	   #:make-assignment
+	   #:defvarlisp
+	   #:make-defvarlisp
+	   #:vectorlisp
+	   #:make-vectorlisp
+	   #:matrixlisp
+	   #:make-matrixlisp
+	   #:numlisp
+	   #:make-numlisp
+	   #:looplisp
+	   #:vectorsum
+	   #:make-vectorsum
+	   #:vectorminus
+	   #:make-vectorminus
+	   #:matrixsum
+	   #:make-matrixsum
+	   #:matrixminus
+	   #:setflisp
+	   #:make-setflisp
+	   #:setqlisp
+	   #:make-setqlisp
+	   #:areflisp
+	   #:make-areflisp
+	   #:sumlisp
+	   #:make-sumlisp
+	   #:minuslisp
+	   #:make-minuslisp))
