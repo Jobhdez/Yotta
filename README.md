@@ -18,9 +18,11 @@ Note: clone `cl-yacc` and `alexa` into `quicklisp/local-projects` so it can be l
 Note: clone this project in `quicklisp/local-projects` so you can load the project with `(ql:quickload :yotta)`.
 
 **Use**:
-- `(ql:quickload :yotta)`
+```
+(ql:quickload :yotta)
 
-- `(in-package :yotta)`
+(in-package :yotta)
+```
 
 **Test**
 `(ql:quickload :yotta/tests)` followed by `(asdf:test-system :yotta)`
