@@ -19,10 +19,10 @@
 		(yotta:lex-line "[4 5 6] + [5 6 7]"))
 	       yotta:*linear-algebra-grammar*))
 	      (list (yotta:MAKE-VECTORSUM
-		  :I (quote I)
+		  :I (quote yotta-var::I)
 		  :N 3
 		  :EXP (yotta:MAKE-SETFLISP
-			  :VAR (yotta:MAKE-AREFLISP :ARRAY (quote NEWARR) :I (quote I))
+			  :VAR (yotta:MAKE-AREFLISP :ARRAY (quote yotta-var::NEWARRAY) :I (quote yotta-var::I))
 			  :EXP (yotta:MAKE-SUMLISP
 				  :LEFTEXP (yotta:MAKE-AREFLISP
 					      :ARRAY (yotta:MAKE-VECTORLISP
@@ -30,14 +30,14 @@
 							:ELEMENTS (list (yotta:MAKE-NUMLISP :N 4)
                                                                         (yotta:MAKE-NUMLISP :N 5)
                                                                         (yotta:MAKE-NUMLISP :N 6)))
-					      :I (quote I))
+					      :I (quote yotta-var::I))
 				  :RIGHTEXP (yotta:MAKE-AREFLISP
 					       :ARRAY (yotta:MAKE-VECTORLISP
 							 :DIMENSION 3
 							 :ELEMENTS (list (yotta:MAKE-NUMLISP :N 5)
                                                                          (yotta:MAKE-NUMLISP :N 6)
                                                                          (yotta:MAKE-NUMLISP :N 7)))
-					       :I (quote I))))
+					       :I (quote yotta-var::I))))
 		  :LEFTEXP (yotta:MAKE-VECTORLISP
 			      :DIMENSION 3
 			      :ELEMENTS (list (yotta:MAKE-NUMLISP :N 4) (yotta:MAKE-NUMLISP :N 5) (yotta:MAKE-NUMLISP :N 6)))
@@ -54,10 +54,10 @@
 		(yotta:lex-line "[4 5 6] - [5 6 7]"))
 	       yotta:*linear-algebra-grammar*))
 	      (list (yotta:MAKE-VECTORMINUS
-		  :I (quote I)
+		  :I (quote yotta-var::I)
 		  :N 3
 		  :EXP (yotta:MAKE-SETFLISP
-			  :VAR (yotta:MAKE-AREFLISP :ARRAY 'NEWARR :I (quote I))
+			  :VAR (yotta:MAKE-AREFLISP :ARRAY (quote yotta-var::NEWARRAY) :I (quote yotta-var::I))
 			  :EXP (yotta:MAKE-MINUSLISP
 				  :LEFTEXP (yotta:MAKE-AREFLISP
 					      :ARRAY (yotta:MAKE-VECTORLISP
@@ -65,14 +65,14 @@
 							:ELEMENTS (list (yotta:MAKE-NUMLISP :N 4)
                                                                         (yotta:MAKE-NUMLISP :N 5)
                                                                         (yotta:MAKE-NUMLISP :N 6)))
-					      :I (quote I))
+					      :I (quote yotta-var::I))
 				  :RIGHTEXP (yotta:MAKE-AREFLISP
 					       :ARRAY (yotta:MAKE-VECTORLISP
 							 :DIMENSION 3
 							 :ELEMENTS (list (yotta:MAKE-NUMLISP :N 5)
                                                                          (yotta:MAKE-NUMLISP :N 6)
                                                                          (yotta:MAKE-NUMLISP :N 7)))
-					       :I (quote I))))
+					       :I (quote yotta-var::I))))
 		  :LEFTEXP (yotta:MAKE-VECTORLISP
 			      :DIMENSION 3
 			      :ELEMENTS (list (yotta:MAKE-NUMLISP :N 4)

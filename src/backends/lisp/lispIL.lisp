@@ -23,39 +23,39 @@
 	 ((plus :left-exp lexp :right-exp rexp)
 	  (if (and (vec-p lexp)
 		   (vec-p rexp))
-	      (make-vectorsum :i 'i
+	      (make-vectorsum :i (quote yotta-var::i)
 			      :n (length (vec-entries lexp))
-			      :exp (make-setflisp :var (make-areflisp :array 'newarr
-								      :i 'i)
+			      :exp (make-setflisp :var (make-areflisp :array (quote yotta-var::newarray)
+								      :i (quote yotta-var::i))
 						  :exp (make-sumlisp :leftexp
 								     (make-areflisp :array
 										    (make-lisp-ast
 										     lexp)
-										    :i 'i)
+										    :i (quote yotta-var::i))
 								     :rightexp
 								     (make-areflisp :array
 										    (make-lisp-ast
 										     rexp)
-										    :i 'i)))
+										    :i (quote yotta-var::i))))
 			      :leftexp (make-lisp-ast lexp)
 			      :rightexp (make-lisp-ast rexp))))
 	 ((minus :left-exp lexp :right-exp rexp)
 	  (if (and (vec-p lexp)
 		   (vec-p rexp))
-	      (make-vectorminus :i 'i
+	      (make-vectorminus :i (quote yotta-var::i)
 			      :n (length (vec-entries lexp))
-			      :exp (make-setflisp :var (make-areflisp :array 'newarr
-								      :i 'i)
+			      :exp (make-setflisp :var (make-areflisp :array (quote yotta-var::newarray)
+								      :i (quote yotta-var::i))
 						  :exp (make-minuslisp :leftexp
 								     (make-areflisp :array
 										    (make-lisp-ast
 										     lexp)
-										    :i 'i)
+										    :i (quote yotta-var::i))
 								     :rightexp
 								     (make-areflisp :array
 										    (make-lisp-ast
 										     rexp)
-										    :i 'i)))
+										    :i (quote yotta-var::i))))
 			      :leftexp (make-lisp-ast lexp)
 			      :rightexp (make-lisp-ast rexp))))
 	 ;((mul :left-exp lexp :right-exp rexp)

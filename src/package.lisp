@@ -53,3 +53,5 @@
 	   #:make-sumlisp
 	   #:minuslisp
 	   #:make-minuslisp))
+(defpackage #:yotta-var
+  (:use))

@@ -10,7 +10,7 @@
     "Make a lexical analyzer for linear algebra expressions."
   ((:num "\\d+")
    (:name "[A-Za-z][A-Za-z0-9_]*"))
-  ("{{NAME}}"  (return (tok :variable (intern (string-upcase $@)))))
+  ("{{NAME}}"  (return (tok :variable (intern (string-upcase $@) "YOTTA-VAR"))))
   ("{{NUM}}"   (return (tok :number   (parse-integer $@))))
   ("\\+"       (return (tok :plus     (intern $@ 'keyword))))
   ("\\-"       (return (tok :minus    (intern $@ 'keyword))))

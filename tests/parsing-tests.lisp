@@ -118,7 +118,7 @@
 	       (yotta:MAKE-PROGRAM
 	       :EXPRESSIONS
 	       (yotta:MAKE-ASSIGNMENT
-		:VARIABLE 'X
+		:VARIABLE (quote yotta-var::x)
 		:EXP (yotta:MAKE-MATRIX
 			    :ENTRIES (list (yotta:MAKE-VEC
 					   :ENTRIES (list (yotta:MAKE-NUM :NUM 4) (yotta:MAKE-NUM :NUM 5)
