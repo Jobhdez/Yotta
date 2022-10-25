@@ -88,6 +88,22 @@ transoforms the parse tree, a high level intermediate language.
   leftexp
   rightexp)
 
+(defstruct dotproduct
+  "DOTPRODUCT node."
+  expression
+  vector1
+  vector2)
+
+(defstruct letexpression
+  "LETEXPRESSION node."
+  id
+  expr
+  body)
+
+(defstruct fakevecmul
+  "FAKEVECMUL node."
+  vec
+  vec2)
 ;;todo: matrixmul, crossproduct, dotproduct
 
 
