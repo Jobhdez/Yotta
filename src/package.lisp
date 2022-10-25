@@ -44,6 +44,7 @@
 	   #:matrixsum
 	   #:make-matrixsum
 	   #:matrixminus
+	   #:make-matrixminus
 	   #:setflisp
 	   #:make-setflisp
 	   #:setqlisp
