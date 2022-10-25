@@ -265,4 +265,52 @@
                          (yotta:make-VECTORLISP
                             :DIMENSION 3
                             :ELEMENTS (list (yotta:make-NUMLISP :N 12) (yotta:make-NUMLISP :N 13)
-                                       (yotta:make-NUMLISP :N 14))))))))))
+					    (yotta:make-NUMLISP :N 14))))))))))
+
+(deftest test-lispIL-dotproduct ()
+  (is (equalp (yotta:make-lisp-interlan
+	       (yotta:parse-with-lexer
+	       (yotta:token-generator
+		(yotta:lex-line "[4 5 6] * [4 5 6]"))
+	       yotta:*linear-algebra-grammar*))
+	      (list (yotta:make-DOTPRODUCT
+    :EXPRESSION (yotta:make-LETEXPRESSION
+                   :ID (quote YOTTA-VAR::VEC)
+                   :EXPR (yotta:make-FAKEVECMUL
+                            :VEC (yotta:make-VECTORLISP
+                                    :DIMENSION 3
+                                    :ELEMENTS (list (yotta:make-NUMLISP :N 4)
+                                               (yotta:make-NUMLISP :N 5)
+                                               (yotta:make-NUMLISP :N 6)))
+                            :VEC2 (yotta:make-VECTORLISP
+                                    :DIMENSION 3
+                                    :ELEMENTS (list (yotta:make-NUMLISP :N 4)
+                                               (yotta:make-NUMLISP :N 5)
+                                               (yotta:make-NUMLISP :N 6))))
+                   :BODY (yotta:make-PROGNLISP
+                            :EXPRESSIONS (list (yotta:make-SETQLISP
+                                             :VAR (quote YOTTA-VAR::SUM)
+                                             :EXP 0)
+                                          (yotta:make-LOOPLISP
+                                             :I (quote YOTTA-VAR::I)
+                                             :N 3
+                                             :EXP (yotta:make-SETQLISP
+                                                     :VAR (quote YOTTA-VAR::SUM)
+                                                     :EXP (yotta:make-SUMLISP
+                                                             :LEFTEXP (quote YOTTA-VAR::SUM)
+                                                             :RIGHTEXP (yotta:make-AREFLISP
+                                                                          :ARRAY (quote YOTTA-VAR::VEC)
+                                                                          :I (quote YOTTA-VAR::I)))))
+                                         (quote YOTTA-VAR::SUM))))
+    :VECTOR1 (yotta:make-VECTORLISP
+                                    :DIMENSION 3
+                                    :ELEMENTS (list (yotta:make-NUMLISP :N 4)
+                                               (yotta:make-NUMLISP :N 5)
+                                               (yotta:make-NUMLISP :N 6)))
+    :VECTOR2 (yotta:make-VECTORLISP
+                                    :DIMENSION 3
+                                    :ELEMENTS (list (yotta:make-NUMLISP :N 4)
+                                               (yotta:make-NUMLISP :N 5)
+                                               (yotta:make-NUMLISP :N 6))))))))
+	      
+
