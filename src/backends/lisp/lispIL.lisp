@@ -105,9 +105,28 @@
 				 :leftexp (make-lisp-ast lexp)
 				 :rightexp (make-lisp-ast rexp)))
 		(t (error "The Expression ~S is not a valid SUM." (list '- lexp rexp)))))
-	 ;((mul :left-exp lexp :right-exp rexp)
-	  ;(if (and (vec-p lexp)
-		   ;(vec-p rexp))
-	     ; (make-mul-vectors (make-lisp-ast lexp) (make-lisp-ast rexp))))
+	 ((mul :left-exp lexp :right-exp rexp)
+	  (if (and (vec-p lexp)
+		   (vec-p rexp))
+	      (make-dotproduct :expression
+			       (make-letexpression :id
+						   (quote yotta-var::vec)
+						   :expr (make-fakevecmul :vec  (make-lisp-ast lexp)
+									  :vec2 (make-lisp-ast rexp))
+						   :body
+						   (make-prognlisp :expressions
+								   (list (make-setqlisp :var (quote yotta-var::sum)
+											:exp 0)
+									 (make-looplisp :i (quote yotta-var::i)
+											:n (length (vec-entries lexp))
+											:exp (make-setqlisp
+											      :var (quote yotta-var::sum)
+											      :exp (make-sumlisp
+												    :leftexp (quote yotta-var::sum)
+												    :rightexp (make-areflisp :array (quote yotta-var::vec)
+															     :i (quote yotta-var::i)))))
+									 (quote yotta-var::sum))))
+			       :vector1 (make-lisp-ast lexp)
+			       :vector2 (make-lisp-ast rexp))))
 	 (_ (error "Not a valid expression node."))))
 
