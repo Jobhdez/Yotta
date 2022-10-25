@@ -36,6 +36,7 @@
 	   #:numlisp
 	   #:make-numlisp
 	   #:looplisp
+	   #:make-looplisp
 	   #:vectorsum
 	   #:make-vectorsum
 	   #:vectorminus
