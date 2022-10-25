@@ -62,7 +62,13 @@
 	   #:dotproduct
 	   #:make-dotproduct
 	   #:fakevecmul
-	   #:make-fakevecmul))
+	   #:make-fakevecmul
+	   #:matrixmul
+	   #:make-matrixmul
+	   #:incflisp
+	   #:make-incflisp
+	   #:mullisp
+	   #:make-mullisp))
 
 (defpackage #:yotta-var
   (:use))
