@@ -312,5 +312,116 @@
                                     :ELEMENTS (list (yotta:make-NUMLISP :N 4)
                                                (yotta:make-NUMLISP :N 5)
                                                (yotta:make-NUMLISP :N 6))))))))
-	      
-
+   
+(deftest test-lispIL-matrixproduct ()
+  (is (equalp (yotta:make-lisp-interlan
+	       (yotta:parse-with-lexer
+	       (yotta:token-generator
+		(yotta:lex-line "[[4 5 6] [6 7 8]] * [[56 6] [7 8] [8 9]]"))
+	       yotta:*linear-algebra-grammar*))
+	      (list (yotta:make-MATRIXMUL
+    :I (quote YOTTA-VAR::I)
+    :N 2
+    :EXP (yotta:make-LOOPLISP
+            :I (quote YOTTA-VAR::J)
+            :N 2
+            :EXP (yotta:make-LETEXPRESSION
+                    :ID (quote YOTTA-VAR::CUR)
+                    :EXPR 0
+                    :BODY (list (yotta:make-LOOPLISP
+                              :I (quote YOTTA-VAR::K)
+                              :N 3
+                              :EXP (yotta:make-INCFLISP
+                                      :ID (quote YOTTA-VAR::CUR)
+                                      :EXP (yotta:make-MULLISP
+                                              :LEFTEXP (yotta:make-AREFLISP
+                                                          :ARRAY (yotta:make-MATRIXLISP
+                                                                    :DIMENSION (list 2
+                                                                                3)
+                                                                    :MATRIX (list (yotta:make-VECTORLISP
+                                                                                :DIMENSION 3
+                                                                                :ELEMENTS (list (yotta:make-NUMLISP
+                                                                                              :N 4)
+                                                                                           (yotta:make-NUMLISP
+                                                                                              :N 5)
+                                                                                           (yotta:make-NUMLISP
+                                                                                              :N 6)))
+                                                                             (yotta:make-VECTORLISP
+                                                                                :DIMENSION 3
+                                                                                :ELEMENTS (list (yotta:make-NUMLISP
+                                                                                              :N 6)
+                                                                                           (yotta:make-NUMLISP
+                                                                                              :N 7)
+                                                                                           (yotta:make-NUMLISP
+                                                                                              :N 8)))))
+                                                          :I (list (quote YOTTA-VAR::I)
+                                                              (quote YOTTA-VAR::K)))
+                                              :RIGHTEXP (yotta:make-AREFLISP
+                                                           :ARRAY (yotta:make-MATRIXLISP
+                                                                     :DIMENSION (list 3
+                                                                                 2)
+                                                                     :MATRIX (list (yotta:make-VECTORLISP
+                                                                                 :DIMENSION 2
+                                                                                 :ELEMENTS (list (yotta:make-NUMLISP
+                                                                                               :N 56)
+                                                                                            (yotta:make-NUMLISP
+                                                                                               :N 6)))
+                                                                              (yotta:make-VECTORLISP
+                                                                                 :DIMENSION 2
+                                                                                 :ELEMENTS (list (yotta:make-NUMLISP
+                                                                                               :N 7)
+                                                                                            (yotta:make-NUMLISP
+                                                                                               :N 8)))
+                                                                              (yotta:make-VECTORLISP
+                                                                                 :DIMENSION 2
+                                                                                 :ELEMENTS (list (yotta:make-NUMLISP
+                                                                                               :N 8)
+                                                                                            (yotta:make-NUMLISP
+                                                                                               :N 9)))))
+                                                           :I (list (quote YOTTA-VAR::K)
+                                                               (quote YOTTA-VAR::J))))))
+                           (yotta:make-SETFLISP
+                              :VAR (yotta:make-AREFLISP
+                                      :ARRAY(quote YOTTA-VAR::REZ)
+                                      :I (list (quote YOTTA-VAR::I) (quote YOTTA-VAR::J)))
+                              :EXP (quote yotta-var::cur)))))
+    :LEFTEXP (yotta:make-MATRIXLISP
+                                                                    :DIMENSION (list 2
+                                                                                3)
+                                                                    :MATRIX (list (yotta:make-VECTORLISP
+                                                                                :DIMENSION 3
+                                                                                :ELEMENTS (list (yotta:make-NUMLISP
+                                                                                              :N 4)
+                                                                                           (yotta:make-NUMLISP
+                                                                                              :N 5)
+                                                                                           (yotta:make-NUMLISP
+                                                                                              :N 6)))
+                                                                             (yotta:make-VECTORLISP
+                                                                                :DIMENSION 3
+                                                                                :ELEMENTS (list (yotta:make-NUMLISP
+                                                                                              :N 6)
+                                                                                           (yotta:make-NUMLISP
+                                                                                              :N 7)
+                                                                                           (yotta:make-NUMLISP
+                                                                                              :N 8)))))
+    :RIGHTEXP  (yotta:make-MATRIXLISP
+                                                                     :DIMENSION (list 3
+                                                                                 2)
+                                                                     :MATRIX (list (yotta:make-VECTORLISP
+                                                                                 :DIMENSION 2
+                                                                                 :ELEMENTS (list (yotta:make-NUMLISP
+                                                                                               :N 56)
+                                                                                            (yotta:make-NUMLISP
+                                                                                               :N 6)))
+                                                                              (yotta:make-VECTORLISP
+                                                                                 :DIMENSION 2
+                                                                                 :ELEMENTS (list (yotta:make-NUMLISP
+                                                                                               :N 7)
+                                                                                            (yotta:make-NUMLISP
+                                                                                               :N 8)))
+                                                                              (yotta:make-VECTORLISP
+                                                                                 :DIMENSION 2
+                                                                                 :ELEMENTS (list (yotta:make-NUMLISP
+                                                                                               :N 8)
+                                                                                            (yotta:make-NUMLISP
+                                                                                               :N 9))))))))))
