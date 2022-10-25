@@ -54,7 +54,15 @@
 	   #:sumlisp
 	   #:make-sumlisp
 	   #:minuslisp
-	   #:make-minuslisp))
+	   #:make-minuslisp
+	   #:prognlisp
+	   #:make-prognlisp
+	   #:letexpressionlisp
+	   #:make-letexpression
+	   #:dotproduct
+	   #:make-dotproduct
+	   #:fakevecmul
+	   #:make-fakevecmul))
 
 (defpackage #:yotta-var
   (:use))
