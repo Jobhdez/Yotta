@@ -25,24 +25,46 @@
 	 ((num :num n)
 	  (make-numlisp :n n))
 	 ((plus :left-exp lexp :right-exp rexp)
-	  (if (and (vec-p lexp)
-		   (vec-p rexp))
-	      (make-vectorsum :i (quote yotta-var::i)
-			      :n (length (vec-entries lexp))
-			      :exp (make-setflisp :var (make-areflisp :array (quote yotta-var::newarray)
-								      :i (quote yotta-var::i))
-						  :exp (make-sumlisp :leftexp
+	  (cond ((and (vec-p lexp)
+		      (vec-p rexp))
+		 (make-vectorsum :i (quote yotta-var::i)
+			         :n (length (vec-entries lexp))
+			         :exp (make-setflisp :var (make-areflisp :array (quote yotta-var::newarray)
+								         :i (quote yotta-var::i))
+						     :exp (make-sumlisp :leftexp
 								     (make-areflisp :array
 										    (make-lisp-ast
 										     lexp)
 										    :i (quote yotta-var::i))
-								     :rightexp
+								        :rightexp
 								     (make-areflisp :array
 										    (make-lisp-ast
 										     rexp)
 										    :i (quote yotta-var::i))))
-			      :leftexp (make-lisp-ast lexp)
-			      :rightexp (make-lisp-ast rexp))))
+								     
+				 :leftexp (make-lisp-ast lexp)
+				 :rightexp (make-lisp-ast rexp)))
+		((and (matrix-p lexp)
+		      (matrix-p rexp))
+		 (make-matrixsum :i (quote yotta-var::i)
+				 :n (length (matrix-entries lexp))
+				 :exp (make-looplisp :i  (quote yotta-var::j)
+						     :n  (length (vec-entries (car (matrix-entries lexp))))
+						     :exp (make-setflisp :var (make-areflisp :array (quote yotta-var::newarray)
+											    :i (list (quote yotta-var::i) (quote yotta-var::j)))
+									:exp (make-sumlisp :leftexp
+											   (make-areflisp :array
+													  (make-lisp-ast lexp)
+													  :i (list (quote yotta-var::i)
+														   (quote yotta-var::j)))
+											   :rightexp
+											   (make-areflisp :array
+													  (make-lisp-ast rexp)
+													  :i (list (quote yotta-var::i)
+														   (quote yotta-var::j))))))
+				 :leftexp (make-lisp-ast lexp)
+				 :rightexp (make-lisp-ast rexp)))
+		(t (error "The Expression ~S is not a valid SUM." (list '+ lexp rexp)))))
 	 ((minus :left-exp lexp :right-exp rexp)
 	  (if (and (vec-p lexp)
 		   (vec-p rexp))
