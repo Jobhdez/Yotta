@@ -55,6 +55,11 @@ transoforms the parse tree, a high level intermediate language.
   leftexp
   rightexp)
 
+(defstruct (matrixmul (:include looplisp))
+  "MATRIXMINUS node."
+  leftexp
+  rightexp)
+
 (defstruct prognlisp
   "PROGNLISP node."
   expressions)
@@ -88,6 +93,10 @@ transoforms the parse tree, a high level intermediate language.
   leftexp
   rightexp)
 
+(defstruct mullisp
+  leftexp
+  rightexp)
+
 (defstruct dotproduct
   "DOTPRODUCT node."
   expression
@@ -104,6 +113,11 @@ transoforms the parse tree, a high level intermediate language.
   "FAKEVECMUL node."
   vec
   vec2)
+
+(defstruct incflisp
+  id
+  exp)
+
 ;;todo: matrixmul, crossproduct, dotproduct
 
 
