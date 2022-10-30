@@ -1,6 +1,9 @@
-# Vector summation Performance results
+# Performance results
 ## overview
 these procedure are a potential target from yotta. this is just prelimary testing :-)
+
+## results for vector summation. 
+take a look at `performance-tests.lisp` to check out the definitons of the procedures that are called below
 ```
 * (time (dotimes (i 5000) (normal-sum testv testv)))
 Evaluation took:
