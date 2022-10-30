@@ -1,4 +1,6 @@
-# Vector summation Performance results 
+# Vector summation Performance results
+## overview
+these procedure are a potential target from yotta. this is just prelimary testing :-)
 ```
 * (time (dotimes (i 5000) (normal-sum testv testv)))
 Evaluation took:
