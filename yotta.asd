@@ -18,7 +18,9 @@
 				    :components ((:file "lispIL")
 						 (:file "ast")
 						 (:file "generatelisp")))))
-     (:file "yotta")))
+     (:file "yotta")
+     (:module "performance"
+	      :components ((:file "performance-tests")))))
 
 (asdf:defsystem #:yotta/tests
     :description "Tests for Yotta."
