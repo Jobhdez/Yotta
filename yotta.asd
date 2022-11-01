@@ -17,7 +17,11 @@
 	      :components ((:module "lisp"
 				    :components ((:file "lispIL")
 						 (:file "ast")
-						 (:file "generatelisp")))))
+						 (:file "generatelisp")))
+			   (:module "c"
+				    :components ((:file "ast")
+						 (:file "c-intermediate-language")
+						 (:file "compile-to-c")))))
      (:file "yotta")
      (:module "performance"
 	      :components ((:file "performance-tests")))))
