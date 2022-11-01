@@ -3,9 +3,10 @@
 ;;;; Compiler
 
 ;;; This is just a quick `compile` function to actually compile a linear
-;;; algebra expression; nevertheless, it is not very robust as does not
+;;; algebra expression; nevertheless, it is not very robust as it does not
 ;;; check for the validity of the linear algebra expression. this will be
-;;; fixed in the near future.
+;;; fixed in the near future. But the parser should give an error message if an invalid 
+;;; expr Is entered.
 
 (defun compile-yotta-expr (expr)
   "Compiles a linear algebra expression into Common Lisp."
