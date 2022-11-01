@@ -26,7 +26,7 @@
 
   (defun build-matrix (left-bracket entries right-bracket)
     (declare (ignore left-bracket right-bracket))
-    (make-matrix :entries entries))
+    (make-matrix :entries (flatten entries)))
 
   (defun build-num (num)
     (make-num :num num))
