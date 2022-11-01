@@ -38,3 +38,13 @@
   n
   fn-name
   type)
+
+(defstruct c-matrix-addition
+  left-exp
+  right-exp
+  dimension)
+
+(defstruct c-matrix-subtraction
+  left-exp
+  right-exp
+  dimension)
