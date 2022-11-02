@@ -5,7 +5,7 @@
 	 (tree (parse-with-lexer (token-generator tokens) *linear-algebra-grammar*))
 	 (cil (make-c-interlan tree))
 	 (generatedcode (compile-to-c cil)))
-    (concatenate 'string linear-algebra-defs " " generatedcode)))
+    (concatenate 'string linear-algebra-defs " " "int main() {" " " generatedcode " " "}")))
 
 (defun compile-to-c (cil)
   "given the C INTERMEDIATE LANGUAGE compile to C."
@@ -66,16 +66,15 @@
 	 
 
 (defun compile-vector-addition (vec vec2 vari varn vartype name vecname vec2name)
-  (concatenate 'string "int main () {" " " vec ";" " " vec2 ";" " " "int size =" varn ";"  " " "int *p = add_vectors(" vecname " "  vec2name " " varn ")" ";" " "
-	       "if (p) {" " "  "for (int i = 0; i < size; i++) {" " "  "printf(""%d\n"", p[i]);" " "  "}" " "  "free(p);}" " " "}"))
+  (concatenate 'string vec ";" " " vec2 ";" " " "int size =" varn ";"  " " "int *p = add_vectors(" vecname " "  vec2name " " varn ")" ";" " "
+	       "if (p) {" " "  "for (int i = 0; i < size; i++) {" " "  "printf(""%d\n"", p[i]);" " "  "}" " "  "free(p);}"))
 
 (defun compile-vector-subtraction (vec vec2 vari varn vartype name vecname vec2name)
-  (concatenate 'string "int main () {" " " vec ";" " " vec2 ";" " " "int size =" varn ";"  " " "int *p = sub_vectors(" vecname " "  vec2name " " varn ")" ";" " "
-	       "if (p) {" " "  "for (int i = 0; i < size; i++) {" " "  "printf(""%d\n"", p[i]);" " "  "}" " "  "free(p);}" " " "}"))
+  (concatenate 'string vec ";" " " vec2 ";" " " "int size =" varn ";"  " " "int *p = sub_vectors(" vecname " "  vec2name " " varn ")" ";" " "
+	       "if (p) {" " "  "for (int i = 0; i < size; i++) {" " "  "printf(""%d\n"", p[i]);" " "  "}" " "  "free(p);}"))
 
 (defun compile-matrix-addition (ma ma2 dims maname ma2name)
   (concatenate 'string
-	       "int main() { "
 	       ma
 	       "; "
 	       ma2
@@ -90,7 +89,6 @@
 
 (defun compile-matrix-subtraction (ma ma2 dims maname ma2name)
   (concatenate 'string
-	       "int main() { "
 	       ma
 	       "; "
 	       ma2
