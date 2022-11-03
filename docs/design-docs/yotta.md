@@ -8,9 +8,8 @@ Linear algebra is important for scientific computation. Even if Yotta does not e
 ### Linear Algebra Language
 #### Concrete Syntax
 ```
-exp ::= scalar | vector | matrice | vector + vector 
-     |  vector - vector | vector * vector | matrice + matrice 
-     |  matrice * matrice | matrice - matrice | var | var = exp
+exp ::= scalar | vector | matrice | exp + exp
+     |  exp - exp | exp * exp | var | var = exp
      
 scalar ::= int
 
