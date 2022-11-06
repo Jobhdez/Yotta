@@ -1,11 +1,19 @@
 (in-package #:yotta)
 
+
+(defun create-c-file(exp)
+  (with-open-file (str "test.c"
+		       :direction :output
+		       :if-exists  :supersede
+		       :if-does-not-exist :create)
+    (format str (compile-with-c-backend exp))))
+
 (defun compile-with-c-backend (exp)
   (let* ((tokens (lex-line exp))
 	 (tree (parse-with-lexer (token-generator tokens) *linear-algebra-grammar*))
 	 (cil (make-c-interlan tree))
 	 (generatedcode (compile-to-c cil)))
-    (concatenate 'string linear-algebra-defs " " "int main() {" " " generatedcode " " "}")))
+    (concatenate 'string linear-algebra-defs generatedcode " " "}")))
 
 (defun compile-to-c (cil)
   "given the C INTERMEDIATE LANGUAGE compile to C."
@@ -66,12 +74,12 @@
 	 
 
 (defun compile-vector-addition (vec vec2 vari varn vartype name vecname vec2name)
-  (concatenate 'string vec ";" " " vec2 ";" " " "int size =" varn ";"  " " "int *p = add_vectors(" vecname " "  vec2name " " varn ")" ";" " "
-	       "if (p) {" " "  "for (int i = 0; i < size; i++) {" " "  "printf(""%d\n"", p[i]);" " "  "}" " "  "free(p);}"))
+  (concatenate 'string vec ";" " " vec2 ";" " " "int size =" varn ";"  " " "int *p = add_vectors(" vecname ","  vec2name "," varn ")" ";" " "
+	       "if (p) {" " "  "for (int i = 0; i < size; i++) {" " "  "printf(%d, p[i]);" " "  "}" " "  "free(p);}"))
 
 (defun compile-vector-subtraction (vec vec2 vari varn vartype name vecname vec2name)
-  (concatenate 'string vec ";" " " vec2 ";" " " "int size =" varn ";"  " " "int *p = sub_vectors(" vecname " "  vec2name " " varn ")" ";" " "
-	       "if (p) {" " "  "for (int i = 0; i < size; i++) {" " "  "printf(""%d\n"", p[i]);" " "  "}" " "  "free(p);}"))
+  (concatenate 'string vec ";" " " vec2 ";" " " "int size =" varn ";"  " " "int *p = sub_vectors(" vecname ","  vec2name "," varn ")" ";" " "
+	       "if (p) {" " "  "for (int i = 0; i < size; i++) {" " "  "printf(%d, p[i]);" " "  "}" " "  "free(p);}"))
 
 (defun compile-matrix-addition (ma ma2 dims maname ma2name)
   (concatenate 'string
@@ -83,7 +91,7 @@
 	       (second dims)
 	       "int **p2 = add_matrices( "
 	       maname
-	       " "
+	       ","
 	       ma2name
 	       ");"))
 
@@ -97,7 +105,7 @@
 	       (second dims)
 	       "int **p2 = sub_matrices( "
 	       maname
-	       " "
+	       ","
 	       ma2name
 	       ");"))
 
@@ -155,7 +163,19 @@
     
 
 (defvar linear-algebra-defs
-  "int *add_vectors(int vec[], int vec2[], int size) {
+  "
+#include <stdio.h>
+#include <stdlib.h>
+
+// vectors
+
+
+/*
+  @param vec: a vector
+  @param vec2: a vector
+  @returns: the sum of VEC and VEC2
+*/
+int *add_vectors(int vec[], int vec2[], int size) {
 
   int *sum = malloc(size);
 
@@ -202,6 +222,65 @@ int *sub_vectors(int vec[], int vec2[], int size) {
 
 
 }
+/*
+  @param vec: a vector
+  @param vec2: a vector
+  @returns: the multiplication of VEC and VEC2
+*/
+int *mul_vectors(int vec[], int vec2[], int size) {
+
+  int *mul = malloc(size);
+
+  if (!mul) {
+
+    return NULL;
+
+  }
+
+  for (int i = 0; i < size; i++) {
+
+    mul[i] = vec[i] * vec2[i];
+
+  }
+
+  return mul;
+
+}
+
+/*
+  @param vec: a vector
+  @param scalar: a scalar
+  @returns: the product of VEC and the SCALAR
+*/
+
+int *mul_scalar(int vec[], int scalar, int size) {
+
+  int *mul = malloc(size);
+
+  if (!mul) {
+
+    return NULL;
+
+  }
+
+  for (int i = 0; i < size; i++) {
+
+    mul[i] = vec[i] * scalar;
+
+  }
+
+  return mul;
+
+}
+
+// matrices
+
+/*
+  @param m: a matrix
+  @param m2: a matrix
+  @returns: the sum of M and M2
+*/
+
 int **add_matrices(int m[2][4], int m2[2][4], int size) {
 
   int **add;
@@ -257,5 +336,38 @@ int **sub_matrices(int m[2][4], int m2[2][4], int size) {
   return sub;
 
 }
-")
+
+/*
+  @param m: a matrix
+  @param scalar: a scalar
+  @returns: the multiplication of the scalar and the matrix
+  the Scalar is multiplied by each member of the matrix.
+*/
+
+int **mul_scalar(int m[2][4], int scalar, int size) {
+
+  int **mul;
+
+  mul = malloc(sizeof(int*) * size);
+
+  for (int i = 0; i < size; i++) {
+
+    mul[i] = malloc(sizeof(int*) * size);
+
+  }
+
+  for (int i = 0; i < 2; i++) {
+
+    for (int j = 0; j < size; j++) {
+
+      mul[i][j] = m[i][j] * scalar;
+
+    }
+
+  }
+  return mul;
+
+}
+
+int main() {")
 
