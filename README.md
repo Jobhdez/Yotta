@@ -1,5 +1,5 @@
 # Yotta 
-Development of a linear algebra compiler in process.
+work in progress.
 
 # Getting Started
 **Dependencies**: 
