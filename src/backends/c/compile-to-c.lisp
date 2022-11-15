@@ -74,12 +74,10 @@
 	 
 
 (defun compile-vector-addition (vec vec2 vari varn vartype name vecname vec2name)
-  (concatenate 'string vec ";" " " vec2 ";" " " "int size =" varn ";"  " " "int *p = add_vectors(" vecname ","  vec2name "," varn ")" ";" " "
-	       "if (p) {" " "  "for (int i = 0; i < size; i++) {" " "  "printf(%d, p[i]);" " "  "}" " "  "free(p);}"))
+  (concatenate 'string vec ";" " " vec2 ";" " " "int size =" varn ";"  " " "int *p = add_vectors(" vecname ","  vec2name "," varn ")" ";"))
 
 (defun compile-vector-subtraction (vec vec2 vari varn vartype name vecname vec2name)
-  (concatenate 'string vec ";" " " vec2 ";" " " "int size =" varn ";"  " " "int *p = sub_vectors(" vecname ","  vec2name "," varn ")" ";" " "
-	       "if (p) {" " "  "for (int i = 0; i < size; i++) {" " "  "printf(%d, p[i]);" " "  "}" " "  "free(p);}"))
+  (concatenate 'string vec ";" " " vec2 ";" " " "int size =" varn ";"  " " "int *p = sub_vectors(" vecname ","  vec2name "," varn ")" ";"))
 
 (defun compile-matrix-addition (ma ma2 dims maname ma2name)
   (concatenate 'string
