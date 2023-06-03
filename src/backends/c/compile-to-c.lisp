@@ -2,113 +2,101 @@
 
 (defparameter linear-algebra-defs
   "
+
 #include <stdio.h>
 #include <stdlib.h>
 
+
+typedef struct vector {
+  int length;
+  int *data;
+} vector;
+
+typedef struct matrix {
+  int rows;
+  int columns;
+  int **data;
+} matrix;
+
 // vectors
+vector *make_vector(int length) {
 
+  vector *v1 = calloc(1, sizeof(*v1));
+  v1->length = length;
+  v1->data = calloc(v1->length, sizeof(*v1->data));
 
-/*
-  @param vec: a vector
-  @param vec2: a vector
-  @returns: the sum of VEC and VEC2
-*/
-int *add_vectors(int vec[], int vec2[], int size) {
+  return v1;
+}
+vector *initialize_vector(vector *v1, int data[]) {
+    for (int i = 0; i < v1->length; i++) {
+      v1->data[i] = data[i];
+}
 
-  int *sum = malloc(size);
-
-  if (!sum) {
-
-    return NULL;
-
-  }
-
-  for (int i = 0; i < size; i++) {
-
-    sum[i] = vec[i] + vec2[i];
-
+  return v1;
+}
     
+vector *add_vectors(vector *v1, vector *v2) {
+  /*
+    @param p1: a vector struct denoting a vector
+    @param p2: a vector struct denoting a vector
+    @returns: p3, a vector struct denoting a vector
 
+    returns the sum of both vector.
+
+   
+   */
+  vector *result = malloc(sizeof(vector));
+  result->data = malloc(v1->length * sizeof(int));
+  result->length = v1->length;
+
+  if (!result->data) {
+    return NULL;
   }
 
-  return sum;
+  for (int i = 0; i < v1->length; i++) {
+    result->data[i] = v1->data[i] + v2->data[i];
+  }
 
+  return result;
 }
 
-/*
-  @param vec: a vector
-  @param vec2: a vector
-  @returns: the subtraction of VEC and VEC2
-*/
-int *sub_vectors(int vec[], int vec2[], int size) {
+vector *sub_vectors(vector *v1, vector *v2) {
 
-  int *sub = malloc(size);
+  /*
 
-  if (!sub) {
+    @param p1: a vector struct denoting a vector
+    @param p2: a vector struct denoting a vector
+    @returns: p3, a vector struct denoting a vector
 
+    returns the subtraction of both vector.
+
+
+
+   */
+  vector *result = malloc(sizeof(vector));
+  result->data = malloc(v1->length);
+  result->length = v1->length;
+
+  if (!result->data) {
     return NULL;
-
   }
 
-  for (int i = 0; i < size; i++) {
-
-    sub[i] = vec[i] - vec2[i];
-
+  for (int i = 0; v1->length; i++) {
+    result->data[i] = v1->data[i] - v2->data[i];
   }
-
-  return sub;
-
-
-}
-/*
-  @param vec: a vector
-  @param vec2: a vector
-  @returns: the multiplication of VEC and VEC2
-*/
-int *mul_vectors(int vec[], int vec2[], int size) {
-
-  int *mul = malloc(size);
-
-  if (!mul) {
-
-    return NULL;
-
-  }
-
-  for (int i = 0; i < size; i++) {
-
-    mul[i] = vec[i] * vec2[i];
-
-  }
-
-  return mul;
-
+  return result;
 }
 
-/*
-  @param vec: a vector
-  @param scalar: a scalar
-  @returns: the product of VEC and the SCALAR
-*/
 
-int *mul_scalar(int vec[], int scalar, int size) {
-
-  int *mul = malloc(size);
-
-  if (!mul) {
-
-    return NULL;
-
+void print_vector(vector *v1) {
+    for (int i = 0; i < v1->length; i++) {
+      printf(\"%d\", v1->data[i]);
+    }
   }
 
-  for (int i = 0; i < size; i++) {
-
-    mul[i] = vec[i] * scalar;
-
-  }
-
-  return mul;
-
+void free_vector(vector *v) {
+  free(v->data);
+  free(v);
 }
 
 // matrices
@@ -119,99 +107,86 @@ int *mul_scalar(int vec[], int scalar, int size) {
   @returns: the sum of M and M2
 */
 
-int **add_matrices(int m[2][4], int m2[2][4], int size) {
-
-  int **add;
-
-  add = malloc(sizeof(int*) * size);
-
-  for (int i = 0; i < size; i++) {
-
-    add[i] = malloc(sizeof(int*) * size);
-
+matrix *make_matrix(int rows, int columns) {
+  /*
+    make a matrix given two ints: rows, and columns
+  */
+  matrix *m = calloc(1, sizeof(*m));
+  m->rows = rows;
+  m->columns = columns;
+  m->data = calloc(m->rows, sizeof(*m->data)); // allocate memory for column array
+  for (int i = 0; i < m->rows; i++) {
+    m->data[i] = calloc(m->columns, sizeof(**m->data));
   }
-
-  for (int i = 0; i < 2; i++) {
-
-    for (int j = 0; j < size; j++) {
-
-      add[i][j] = m[i][j] + m2[i][j];
-
-    }
-
-  }
-  return add;
-
-
-
+ 
+  return m;
 }
 
-/*
-  @param m: a matrix
-  @param m2: a matrix
-  @returns: the subtraction of M and M2
-*/
-int **sub_matrices(int m[2][4], int m2[2][4], int size) {
-
-  int **sub;
-
-  sub = malloc(sizeof(int*) * size);
-  for (int i = 0; i < size; i++) {
-
-    sub[i] = malloc(sizeof(int*) * size);
-
-  }
-
-  for (int i = 0; i < 2; i++) {
-
-    for (int j = 0; j < size; j++) {
-
-      sub[i][j] = m[i][j] + m2[i][j];
-
+matrix *initialize_matrix(matrix *m1, int **data) {
+   for (int i = 0; i < m1->rows; i++) {
+     for (int j = 0; j < m1->columns; j++) {
+       m1->data[i][j] = data[i][j];
     }
+}
+  return m1;
+}
+       
+matrix *add_mat(matrix *m1, matrix *m2) {
 
+  /*
+    add matrixes m1 and m2.
+    
+   */
+  int rows = m1->rows;
+  int columns = m1->columns;
+
+  matrix *m3 = make_matrix(rows, columns);
+
+  for (int i = 0; i < m3->rows; i++) {
+    for (int j = 0; j < m3->columns; j++) {
+      m3->data[i][j] = m1->data[i][j] + m2->data[i][j];
+    }
   }
-  return sub;
-
+  return m3;
 }
 
-/*
-  @param m: a matrix
-  @param scalar: a scalar
-  @returns: the multiplication of the scalar and the matrix
-  the Scalar is multiplied by each member of the matrix.
-*/
+matrix *sub_mat(matrix *m1, matrix *m2) {
+  /* subtract matrixes m1 and m2*/
+  int rows = m1->rows;
+  int columns = m1->columns;
 
-int **ma_mul_scalar(int m[2][4], int scalar, int size) {
+  matrix *m3 = make_matrix(rows, columns);
 
-  int **mul;
-
-  mul = malloc(sizeof(int*) * size);
-
-  for (int i = 0; i < size; i++) {
-
-    mul[i] = malloc(sizeof(int*) * size);
-
-  }
-
-  for (int i = 0; i < 2; i++) {
-
-    for (int j = 0; j < size; j++) {
-
-      mul[i][j] = m[i][j] * scalar;
-
+  for (int i = 0; i < m3->rows; i++) {
+    for (int j = 0; j < m3->columns; j++) {
+      m3->data[i][j] = m1->data[i][j] + m2->data[i][j];
     }
-
   }
-  return mul;
+  return m3;
+}
 
+void print_matrix(matrix *m) {
+  for (int i = 0; i < m->rows; i++) {
+    for (int j = 0; j < m->columns; j++) {
+      printf(\"%d\", m->data[i][j]);
+      printf(\"\\t\");
+    }
+    printf(\"\\n\");
+  }
+}
+
+
+
+void free_matrix(matrix *m) {
+  free(m->data);
+  free(m);
 }
 
 int main() {")
 
 
 (defun create-c-file(exp)
-  (with-open-file (str "test.c"
+  (with-open-file (str "test2.c"
 		       :direction :output
 		       :if-exists  :supersede
 		       :if-does-not-exist :create)
@@ -283,10 +258,10 @@ int main() {")
 	 
 
 (defun compile-vector-addition (vec vec2 vari varn vartype name vecname vec2name)
-  (concatenate 'string vec ";" " " vec2 ";" " " "int size =" varn ";"  " " "int *p = add_vectors(" vecname ","  vec2name "," varn ")" ";"))
+  (concatenate 'string vec ";" " " vec2 ";"   " " "vector *p = add_vectors(" vecname ","  vec2name ")" ";" " print_vector(p); " "free_vector(p);"))
 
 (defun compile-vector-subtraction (vec vec2 vari varn vartype name vecname vec2name)
-  (concatenate 'string vec ";" " " vec2 ";" " " "int size =" varn ";"  " " "int *p = sub_vectors(" vecname ","  vec2name "," varn ")" ";"))
+  (concatenate 'string vec ";" " " vec2 ";" " " "int size =" varn ";"  " " "int *p = sub_vectors(" vecname ","  vec2name "," varn ")" ";" " print_vector(p); " "free_vector(p);"))
 
 (defun compile-matrix-addition (ma ma2 dims maname ma2name)
   (concatenate 'string
@@ -296,11 +271,13 @@ int main() {")
 	       "; "
 	       "int size = "
 	       (second dims)
-	       "int **p2 = add_matrices( "
+	       " int **p2 = add_matrices( "
 	       maname
 	       ","
 	       ma2name
-	       ");"))
+	       ");"
+	       " print_matrix(p2);"
+	       " free_matrix(p2);"))
 
 (defun compile-matrix-subtraction (ma ma2 dims maname ma2name)
   (concatenate 'string
@@ -310,11 +287,13 @@ int main() {")
 	       "; "
 	       "int size = "
 	       (second dims)
-	       "int **p2 = sub_matrices( "
+	       " int **p2 = sub_matrices( "
 	       maname
 	       ","
 	       ma2name
-	       ");"))
+	       ");"
+	       " print_matrix(p2);"
+               " free_matrix(p2);"))
 
 (defun compile-vec (vec-ast-node)
   "compile to a C ARRAY from a VEV C IL node."
@@ -325,15 +304,31 @@ int main() {")
 		    :name name)
 	  (let* ((ty (symbol->string type))
 		 (len (write-to-string l))
+		 (name2 (*gensym* "vector_"))
+		 (*data* (*gensym* "data"))
 		 (expression (concatenate 'string
-						ty
-						" "
-						name
-						"[" len "]"
-						" "
-						"="
-						" "
-					        "{" (get-numbers nums) "}")))
+					  "vector "
+					  "*"
+					  name2
+					  "= "
+					  "make_vector("
+					  len
+					  ");"
+					  " "
+					  "int "
+					  *data*
+					  "[] "
+					  "="
+					   "{" (get-numbers nums) "} "
+					   "vector "
+					   "*"
+					  name
+					  "="
+					  "initialize_vector("
+					  name2
+					  ","
+					  *data*
+					  ")")))
 	    expression))))
 
 (defun compile-matrix (matrix-ast-node)
@@ -344,7 +339,7 @@ int main() {")
 		    :name name)
 	   (let* ((ty (symbol->string type))
 		  (len (mapcar (lambda (n) (write-to-string n)) le))
-		  (els2 (mapcar #'compile-vec els))
+		  (els2 (mapcar #'get-nums els))
 		 (expression (concatenate 'string
 						ty
 						" "
@@ -353,13 +348,21 @@ int main() {")
 						" "
 						"="
 						" "
-					        "{" (get-matrix-numbers els2 ) "}")))
+					        "{" (make-matrix-str (mapcar (lambda (n) (format nil "{~a}" n)) els2)))))
 	    expression))))
 
 	  
 
 (defun symbol->string (s)
   (string-downcase (symbol-name s)))
+
+(defun get-nums (vec)
+  (let ((ns (mapcar (lambda (num) (c-number-n num)) (c-vector-elements vec))))
+    (format nil "~{~A~^, ~}" ns)))
+
+(defun make-matrix-str (lst)
+    (cond ((null lst) "}")
+           (t (concatenate 'string (car lst) (make-matrix-str (cdr lst))))))
 
 (defun get-numbers (nums)
   (let ((ns (mapcar (lambda (num) (c-number-n num)) nums)))
