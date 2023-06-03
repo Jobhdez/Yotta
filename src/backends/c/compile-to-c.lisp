@@ -1,166 +1,6 @@
 (in-package #:yotta)
 
-
-(defun create-c-file(exp)
-  (with-open-file (str "test.c"
-		       :direction :output
-		       :if-exists  :supersede
-		       :if-does-not-exist :create)
-    (format str (compile-with-c-backend exp))))
-
-(defun compile-with-c-backend (exp)
-  (let* ((tokens (lex-line exp))
-	 (tree (parse-with-lexer (token-generator tokens) *linear-algebra-grammar*))
-	 (cil (make-c-interlan tree))
-	 (generatedcode (compile-to-c cil)))
-    (concatenate 'string linear-algebra-defs generatedcode " " "}")))
-
-(defun compile-to-c (cil)
-  "given the C INTERMEDIATE LANGUAGE compile to C."
-  (match cil
-	 ((c-vector-addition :left-exp lexp
-			    :right-exp rexp
-			    :i i
-			    :n n
-			    :fn-name name
-			    :type type)
-	  (let* ((vec (compile-vec lexp))
-		 (vec2 (compile-vec rexp))
-		 (vari (symbol->string i))
-		 (varn (write-to-string n))
-		 (vartype (symbol->string type)))
-	    (compile-vector-addition vec
-				     vec2
-				     vari
-				     varn
-				     vartype
-				     name
-				     (c-vector-name lexp)
-				     (c-vector-name rexp))))
-	 
-	 ((c-vector-subtraction :left-exp lexp
-			    :right-exp rexp
-			    :i i
-			    :n n
-			    :fn-name name
-			    :type type)
-	  (let* ((vec (compile-vec lexp))
-		 (vec2 (compile-vec rexp))
-		 (vari (symbol->string i))
-		 (varn (write-to-string n))
-		 (vartype (symbol->string type)))
-	    (compile-vector-subtraction vec
-				        vec2
-				        vari
-				        varn
-				        vartype
-				        name
-					(c-vector-name lexp)
-					(c-vector-name rexp))))
-	 ((c-matrix-addition :left-exp lexp
-			     :right-exp rexp
-			     :dimension dim)
-	  (let* ((ma (compile-matrix lexp))
-		 (ma2 (compile-matrix rexp))
-		 (dims (mapcar (lambda (n) (write-to-string n)) dim)))
-	    (compile-matrix-addition ma ma2 dims (c-matrix-name lexp) (c-matrix-name rexp))))
-	 ((c-matrix-subtraction :left-exp lexp
-			     :right-exp rexp
-			     :dimension dim)
-	  (let* ((ma (compile-matrix lexp))
-		 (ma2 (compile-matrix rexp))
-		 (dims (mapcar (lambda (n) (write-to-string n)) dim)))
-	    (compile-matrix-subtraction ma ma2 dims (c-matrix-name lexp) (c-matrix-name rexp))))))
-	 
-
-(defun compile-vector-addition (vec vec2 vari varn vartype name vecname vec2name)
-  (concatenate 'string vec ";" " " vec2 ";" " " "int size =" varn ";"  " " "int *p = add_vectors(" vecname ","  vec2name "," varn ")" ";"))
-
-(defun compile-vector-subtraction (vec vec2 vari varn vartype name vecname vec2name)
-  (concatenate 'string vec ";" " " vec2 ";" " " "int size =" varn ";"  " " "int *p = sub_vectors(" vecname ","  vec2name "," varn ")" ";"))
-
-(defun compile-matrix-addition (ma ma2 dims maname ma2name)
-  (concatenate 'string
-	       ma
-	       "; "
-	       ma2
-	       "; "
-	       "int size = "
-	       (second dims)
-	       "int **p2 = add_matrices( "
-	       maname
-	       ","
-	       ma2name
-	       ");"))
-
-(defun compile-matrix-subtraction (ma ma2 dims maname ma2name)
-  (concatenate 'string
-	       ma
-	       "; "
-	       ma2
-	       "; "
-	       "int size = "
-	       (second dims)
-	       "int **p2 = sub_matrices( "
-	       maname
-	       ","
-	       ma2name
-	       ");"))
-
-(defun compile-vec (vec-ast-node)
-  "compile to a C ARRAY from a VEV C IL node."
-  (match vec-ast-node
-	 ((c-vector :type type
-		    :length l
-		    :elements nums
-		    :name name)
-	  (let* ((ty (symbol->string type))
-		 (len (write-to-string l))
-		 (expression (concatenate 'string
-						ty
-						" "
-						name
-						"[" len "]"
-						" "
-						"="
-						" "
-					        "{" (get-numbers nums) "}")))
-	    expression))))
-
-(defun compile-matrix (matrix-ast-node)
-  (match matrix-ast-node
-	 ((c-matrix :type type
-		    :length le
-		    :elements els
-		    :name name)
-	   (let* ((ty (symbol->string type))
-		  (len (mapcar (lambda (n) (write-to-string n)) le))
-		  (els2 (mapcar #'compile-vec els))
-		 (expression (concatenate 'string
-						ty
-						" "
-						name
-						"[" (car len) "][" (second len) "]"
-						" "
-						"="
-						" "
-					        "{" (get-matrix-numbers els2 ) "}")))
-	    expression))))
-
-	  
-
-(defun symbol->string (s)
-  (string-downcase (symbol-name s)))
-
-(defun get-numbers (nums)
-  (let ((ns (mapcar (lambda (num) (c-number-n num)) nums)))
-	(format nil "~{~A~^, ~}" ns)))
-
-(defun get-matrix-numbers (nums)
-    (format nil "~{~A~^, ~}" nums))
-    
-
-(defvar linear-algebra-defs
+(defparameter linear-algebra-defs
   "
 #include <stdio.h>
 #include <stdlib.h>
@@ -342,7 +182,7 @@ int **sub_matrices(int m[2][4], int m2[2][4], int size) {
   the Scalar is multiplied by each member of the matrix.
 */
 
-int **mul_scalar(int m[2][4], int scalar, int size) {
+int **ma_mul_scalar(int m[2][4], int scalar, int size) {
 
   int **mul;
 
@@ -368,4 +208,163 @@ int **mul_scalar(int m[2][4], int scalar, int size) {
 }
 
 int main() {")
+
+
+(defun create-c-file(exp)
+  (with-open-file (str "test.c"
+		       :direction :output
+		       :if-exists  :supersede
+		       :if-does-not-exist :create)
+    (format str (compile-with-c-backend exp))))
+
+(defun compile-with-c-backend (exp)
+  (let* ((tokens (lex-line exp))
+	 (tree (parse-with-lexer (token-generator tokens) *linear-algebra-grammar*))
+	 (cil (make-c-interlan tree))
+	 (generatedcode (compile-to-c cil)))
+    (concatenate 'string linear-algebra-defs generatedcode " " "}")))
+
+(defun compile-to-c (cil)
+  "given the C INTERMEDIATE LANGUAGE compile to C."
+  (match cil
+	 ((c-vector-addition :left-exp lexp
+			    :right-exp rexp
+			    :i i
+			    :n n
+			    :fn-name name
+			    :type type)
+	  (let* ((vec (compile-vec lexp))
+		 (vec2 (compile-vec rexp))
+		 (vari (symbol->string i))
+		 (varn (write-to-string n))
+		 (vartype (symbol->string type)))
+	    (compile-vector-addition vec
+				     vec2
+				     vari
+				     varn
+				     vartype
+				     name
+				     (c-vector-name lexp)
+				     (c-vector-name rexp))))
+	 
+	 ((c-vector-subtraction :left-exp lexp
+			    :right-exp rexp
+			    :i i
+			    :n n
+			    :fn-name name
+			    :type type)
+	  (let* ((vec (compile-vec lexp))
+		 (vec2 (compile-vec rexp))
+		 (vari (symbol->string i))
+		 (varn (write-to-string n))
+		 (vartype (symbol->string type)))
+	    (compile-vector-subtraction vec
+				        vec2
+				        vari
+				        varn
+				        vartype
+				        name
+					(c-vector-name lexp)
+					(c-vector-name rexp))))
+	 ((c-matrix-addition :left-exp lexp
+			     :right-exp rexp
+			     :dimension dim)
+	  (let* ((ma (compile-matrix lexp))
+		 (ma2 (compile-matrix rexp))
+		 (dims (mapcar (lambda (n) (write-to-string n)) dim)))
+	    (compile-matrix-addition ma ma2 dims (c-matrix-name lexp) (c-matrix-name rexp))))
+	 ((c-matrix-subtraction :left-exp lexp
+			     :right-exp rexp
+			     :dimension dim)
+	  (let* ((ma (compile-matrix lexp))
+		 (ma2 (compile-matrix rexp))
+		 (dims (mapcar (lambda (n) (write-to-string n)) dim)))
+	    (compile-matrix-subtraction ma ma2 dims (c-matrix-name lexp) (c-matrix-name rexp))))))
+	 
+
+(defun compile-vector-addition (vec vec2 vari varn vartype name vecname vec2name)
+  (concatenate 'string vec ";" " " vec2 ";" " " "int size =" varn ";"  " " "int *p = add_vectors(" vecname ","  vec2name "," varn ")" ";"))
+
+(defun compile-vector-subtraction (vec vec2 vari varn vartype name vecname vec2name)
+  (concatenate 'string vec ";" " " vec2 ";" " " "int size =" varn ";"  " " "int *p = sub_vectors(" vecname ","  vec2name "," varn ")" ";"))
+
+(defun compile-matrix-addition (ma ma2 dims maname ma2name)
+  (concatenate 'string
+	       ma
+	       "; "
+	       ma2
+	       "; "
+	       "int size = "
+	       (second dims)
+	       "int **p2 = add_matrices( "
+	       maname
+	       ","
+	       ma2name
+	       ");"))
+
+(defun compile-matrix-subtraction (ma ma2 dims maname ma2name)
+  (concatenate 'string
+	       ma
+	       "; "
+	       ma2
+	       "; "
+	       "int size = "
+	       (second dims)
+	       "int **p2 = sub_matrices( "
+	       maname
+	       ","
+	       ma2name
+	       ");"))
+
+(defun compile-vec (vec-ast-node)
+  "compile to a C ARRAY from a VEV C IL node."
+  (match vec-ast-node
+	 ((c-vector :type type
+		    :length l
+		    :elements nums
+		    :name name)
+	  (let* ((ty (symbol->string type))
+		 (len (write-to-string l))
+		 (expression (concatenate 'string
+						ty
+						" "
+						name
+						"[" len "]"
+						" "
+						"="
+						" "
+					        "{" (get-numbers nums) "}")))
+	    expression))))
+
+(defun compile-matrix (matrix-ast-node)
+  (match matrix-ast-node
+	 ((c-matrix :type type
+		    :length le
+		    :elements els
+		    :name name)
+	   (let* ((ty (symbol->string type))
+		  (len (mapcar (lambda (n) (write-to-string n)) le))
+		  (els2 (mapcar #'compile-vec els))
+		 (expression (concatenate 'string
+						ty
+						" "
+						name
+						"[" (car len) "][" (second len) "]"
+						" "
+						"="
+						" "
+					        "{" (get-matrix-numbers els2 ) "}")))
+	    expression))))
+
+	  
+
+(defun symbol->string (s)
+  (string-downcase (symbol-name s)))
+
+(defun get-numbers (nums)
+  (let ((ns (mapcar (lambda (num) (c-number-n num)) nums)))
+	(format nil "~{~A~^, ~}" ns)))
+
+(defun get-matrix-numbers (nums)
+    (format nil "~{~A~^, ~}" nums))
 
