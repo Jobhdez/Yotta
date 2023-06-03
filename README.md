@@ -17,7 +17,16 @@ Note: clone this project in `quicklisp/local-projects` so you can load the proje
 
 (in-package :yotta)
 ```
-
+To compile an vector addition expression such as `[2 3 4] + [4 5 6]` use:
+```
+(create-c-file "[2 3 4] + [4 5 6]")
+```
+This will create a file `test2.c` which you then can compile it further with gcc:
+```
+gcc test2.c
+./a.out
+```
+Currently, as of June 3 2023 only vector addition is working.
 **Test**
 ```
 (ql:quickload :yotta/tests)
