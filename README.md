@@ -19,11 +19,11 @@ Note: clone this project in `quicklisp/local-projects` so you can load the proje
 ```
 To compile an vector addition expression such as `[2 3 4] + [4 5 6]` use:
 ```
-(create-c-file "[2 3 4] + [4 5 6]")
+(create-c-file "[2 3 4] + [4 5 6]" <filename>)
 ```
-This will create a file `test2.c` which you then can compile it further with gcc:
+This will create a C file  which you then can compile it further with gcc:
 ```
-gcc test2.c
+gcc <filename>
 ./a.out
 ```
 Vector addition and subtraction and matrix addition and subtraction compiles to C that compiles with GCC.
