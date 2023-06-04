@@ -26,7 +26,8 @@ This will create a file `test2.c` which you then can compile it further with gcc
 gcc test2.c
 ./a.out
 ```
-Currently, as of June 3 2023 only vector addition is working.
+Vector addition and subtraction and matrix addition and subtraction compiles to C that compiles with GCC.
+
 **Test**
 ```
 (ql:quickload :yotta/tests)
