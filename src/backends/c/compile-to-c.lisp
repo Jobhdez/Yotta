@@ -61,36 +61,33 @@ vector *add_vectors(vector *v1, vector *v2) {
 }
 
 vector *sub_vectors(vector *v1, vector *v2) {
-
   /*
-
     @param p1: a vector struct denoting a vector
     @param p2: a vector struct denoting a vector
     @returns: p3, a vector struct denoting a vector
 
-    returns the subtraction of both vector.
+    returns the sub of both vector.
 
-
-
+   
    */
   vector *result = malloc(sizeof(vector));
-  result->data = malloc(v1->length);
+  result->data = malloc(v1->length * sizeof(int));
   result->length = v1->length;
 
   if (!result->data) {
     return NULL;
   }
 
-  for (int i = 0; v1->length; i++) {
+  for (int i = 0; i < v1->length; i++) {
     result->data[i] = v1->data[i] - v2->data[i];
   }
+
   return result;
 }
 
-
 void print_vector(vector *v1) {
     for (int i = 0; i < v1->length; i++) {
-      printf(\"%d\", v1->data[i]);
+      printf(\"%d \", v1->data[i]);
     }
   }
 
@@ -261,7 +258,7 @@ int main() {")
   (concatenate 'string vec ";" " " vec2 ";"   " " "vector *p = add_vectors(" vecname ","  vec2name ")" ";" " print_vector(p); " "free_vector(p);"))
 
 (defun compile-vector-subtraction (vec vec2 vari varn vartype name vecname vec2name)
-  (concatenate 'string vec ";" " " vec2 ";" " " "int size =" varn ";"  " " "int *p = sub_vectors(" vecname ","  vec2name "," varn ")" ";" " print_vector(p); " "free_vector(p);"))
+  (concatenate 'string vec ";" " " vec2 ";" " " "vector *p = sub_vectors(" vecname ","  vec2name ")" ";" " print_vector(p); " "free_vector(p);"))
 
 (defun compile-matrix-addition (ma ma2 dims maname ma2name)
   (concatenate 'string
@@ -319,7 +316,7 @@ int main() {")
 					  *data*
 					  "[] "
 					  "="
-					   "{" (get-numbers nums) "} "
+					   "{" (get-numbers nums) "}; "
 					   "vector "
 					   "*"
 					  name
@@ -328,7 +325,7 @@ int main() {")
 					  name2
 					  ","
 					  *data*
-					  ")")))
+					  ");")))
 	    expression))))
 
 (defun compile-matrix (matrix-ast-node)
