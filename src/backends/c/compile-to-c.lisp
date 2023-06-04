@@ -119,7 +119,7 @@ matrix *make_matrix(int rows, int columns) {
   return m;
 }
 
-matrix *initialize_matrix(matrix *m1, int **data) {
+matrix *initialize_matrix(matrix *m1, int n, int data[][n]) {
    for (int i = 0; i < m1->rows; i++) {
      for (int j = 0; j < m1->columns; j++) {
        m1->data[i][j] = data[i][j];
@@ -266,9 +266,7 @@ int main() {")
 	       "; "
 	       ma2
 	       "; "
-	       "int size = "
-	       (second dims)
-	       " int **p2 = add_matrices( "
+	       " matrix *p2 = add_mat( "
 	       maname
 	       ","
 	       ma2name
@@ -337,15 +335,39 @@ int main() {")
 	   (let* ((ty (symbol->string type))
 		  (len (mapcar (lambda (n) (write-to-string n)) le))
 		  (els2 (mapcar #'get-nums els))
-		 (expression (concatenate 'string
-						ty
-						" "
-						name
-						"[" (car len) "][" (second len) "]"
-						" "
-						"="
-						" "
-					        "{" (make-matrix-str (mapcar (lambda (n) (format nil "{~a}" n)) els2)))))
+		  (name2 (*gensym* "matrix_"))
+		  (*data* (*gensym* "data"))
+		  (expression (concatenate 'string
+					   "matrix "
+					   "*"
+					   name2
+					   "= "
+					   "make_matrix("
+					   (car len)
+					   ","
+					   (second len)
+					   ");"
+					   "int "
+					   *data*
+					   "[]["
+					   (second len)
+					   "]"
+					   "="
+					   "{" (format nil "~{~a~^,~}" (mapcar (lambda (n) (format nil "{~a}" n)) els2))
+					   "}"
+					   ";"
+					   "matrix "
+					   "*"
+					   name
+					   "="
+					   "initialize_matrix("
+					   name2
+					   ","
+					   (second len)
+					   ","
+					   *data*
+					   ");")))
+					
 	    expression))))
 
 	  
