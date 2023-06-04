@@ -156,7 +156,7 @@ matrix *sub_mat(matrix *m1, matrix *m2) {
 
   for (int i = 0; i < m3->rows; i++) {
     for (int j = 0; j < m3->columns; j++) {
-      m3->data[i][j] = m1->data[i][j] + m2->data[i][j];
+      m3->data[i][j] = m1->data[i][j] - m2->data[i][j];
     }
   }
   return m3;
@@ -280,9 +280,7 @@ int main() {")
 	       "; "
 	       ma2
 	       "; "
-	       "int size = "
-	       (second dims)
-	       " int **p2 = sub_matrices( "
+	       " matrix *p2 = sub_mat( "
 	       maname
 	       ","
 	       ma2name
