@@ -17,11 +17,16 @@ Note: clone this project in `quicklisp/local-projects` so you can load the proje
 
 (in-package :yotta)
 ```
-To compile an vector addition expression such as `[2 3 4] + [4 5 6]` use:
+To compile a vector addition expression such as `[2 3 4] + [4 5 6]` use:
 ```
-(create-c-file "[2 3 4] + [4 5 6]" <filename>)
+(create-c-file "[2 3 4] + [4 5 6]" <filename.c>)
 ```
-This will create a C file  which you then can compile it further with gcc:
+
+To compile a matrix addition use:
+```
+(create-c-file "[[3 4 5][5 6 7]] + [[4 5 6][6 7 8]]" <filename.c>)
+```
+This will in turn create a `c` file  which you then can compile it further with gcc:
 ```
 gcc <filename>
 ./a.out
