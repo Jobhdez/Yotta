@@ -50,6 +50,7 @@ vector *add_vectors(vector *v1, vector *v2) {
   result->length = v1->length;
 
   if (!result->data) {
+    free(result);
     return NULL;
   }
 
@@ -75,6 +76,7 @@ vector *sub_vectors(vector *v1, vector *v2) {
   result->length = v1->length;
 
   if (!result->data) {
+    free(result);
     return NULL;
   }
 
