@@ -51,4 +51,4 @@ Vector addition and subtraction and matrix addition and subtraction compiles to 
 ```
 
 ## Acknowledgements
-[Robert Smith](https://github.com/stylewarning) is helping me design this compiler.
+This proof of concept was born after having some conversations with [Robert Smith](https://github.com/stylewarning) 
