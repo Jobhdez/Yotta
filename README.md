@@ -26,6 +26,14 @@ I am building this compiler just out of curiosity; I want to build compilers but
 
 (in-package :yotta)
 ```
+### C backend
+The C backend supports basic linear algebra expressions such as:
+
+- Vector addition and subtraction
+
+- Matrix addition and subtraction
+
+#### Examples
 To compile a basic linear algebra expression such as `[2 3 4] + [4 5 6]` use:
 ```
 (generate-c "[2 3 4] + [4 5 6]" <filename.c>)
@@ -39,7 +47,36 @@ This will in turn create a `c` file  which you then can compile it further with 
 gcc <filename.c>
 ./a.out
 ```
-Vector addition and subtraction and matrix addition and subtraction compiles to C that compiles with GCC.
+
+### Lisp backend
+
+The Lisp backend supports the following expressions:
+
+- vector addition and subtraction
+
+- dot product
+
+- matrix addition and subtraction
+
+#### Example
+
+```
+* (defparameter ast*
+    (parse-with-lexer
+      (token-generator
+        (lex-line "[3 4 5 6]+[4 5 6 7]"))
+      *linear-algebra-grammar*))
+
+* (defparameter lisp-intermediate-language (make-lisp-interlan ast*))
+
+* (generate-lisp lisp-intermediate-language) ;; ->
+(PROGN
+ (SETQ NEWA (MAKE-ARRAY 3))
+ (DOTIMES (I 3)
+   (SETF (AREF NEWA I)
+           (+ (AREF (MAKE-ARRAY 4 (3 4 5 6)) I)
+              (AREF (MAKE-ARRAY 4 (4 5 6 7)) I))))
+ NEWA)
 
 ## Test
 ```
