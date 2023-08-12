@@ -182,7 +182,7 @@ void free_matrix(matrix *m) {
 int main() {")
 
 
-(defun create-c-file (exp filename)
+(defun generate-c (exp filename)
   (with-open-file (str filename
 		       :direction :output
 		       :if-exists  :supersede
