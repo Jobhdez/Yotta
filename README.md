@@ -77,7 +77,7 @@ The Lisp backend supports the following expressions:
            (+ (AREF (MAKE-ARRAY 4 (3 4 5 6)) I)
               (AREF (MAKE-ARRAY 4 (4 5 6 7)) I))))
  NEWA)
-
+```
 ## Test
 ```
 (ql:quickload :yotta/tests)
