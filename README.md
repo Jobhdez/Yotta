@@ -1,5 +1,4 @@
 # Yotta 
-todo: rewrite it in racket :-)
 
 A basic linear algebra compiler. As of today, 6/5/23 it compiles a simple linear algebra language to C and Lisp; right now, this compiler is more of a proof of concept or experiment and consequently, this is compiler is not useful. I mostly did it for fun. I will probably rewrite it and extend the language and actually generate the C code. Right now, it compiles to calls to C functions and then these generated function calls get appended to a string consisting of the C linear algebra functions. Something like this is actually done in practice but with actual performant C code; I believe Google's XLA compiler has an option to compile to Eigen calls; but there's also the option of building just a library instead of a compiler and the other option is to build a compiler that does not compile to set of bindings but to actually generate code.
 
